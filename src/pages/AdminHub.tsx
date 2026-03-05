@@ -153,16 +153,36 @@ export default function AdminHub() {
         fetchData();
     }, [isAuthenticated]);
 
+    // Persist login state
+    useEffect(() => {
+        const adminAuthExpiry = localStorage.getItem('adminAuthExpiry');
+        if (adminAuthExpiry && new Date(adminAuthExpiry) > new Date()) {
+            setIsAuthenticated(true);
+        } else {
+            localStorage.removeItem('adminAuthExpiry');
+            setIsAuthenticated(false);
+        }
+    }, []);
+
     const handlePinSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Super secret hardcoded PIN for the demonstration
         if (pin === '8888') {
             setIsAuthenticated(true);
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 5);
+            localStorage.setItem('adminAuthExpiry', expiryDate.toISOString());
         } else {
             setPinError(true);
             setTimeout(() => setPinError(false), 2000);
             setPin('');
         }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminAuthExpiry');
+        setIsAuthenticated(false);
+        navigate('/');
     };
 
     const handleFileSelect = (id: string, file: File | null) => {
@@ -402,9 +422,14 @@ export default function AdminHub() {
                         <h1 className="text-3xl font-black uppercase tracking-tighter">Admin Portal</h1>
                         <p className="text-sm text-white/50 mt-1">Manage network fulfillments, operations, and leads.</p>
                     </div>
-                    <button onClick={() => navigate('/dashboard')} className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors">
-                        Exit Admin
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => navigate('/dashboard')} className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-2">
+                            Client View
+                        </button>
+                        <button onClick={handleLogout} className="px-6 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-2 text-[10px]">
+                            <Lock className="w-3 h-3" /> Lock Portal
+                        </button>
+                    </div>
                 </header>
 
                 <div className="flex flex-wrap gap-2 mb-8 border-b border-white/10 pb-4">
