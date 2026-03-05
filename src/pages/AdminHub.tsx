@@ -180,9 +180,9 @@ export default function AdminHub() {
                 return next;
             });
 
-        } catch (err) {
+        } catch (err: any) {
             console.error('Fulfillment error:', err);
-            alert('Failed to fulfill order. Check console.');
+            alert(`Upload Failed: ${err.message || 'Check console'}\n\n(If you see a Row-Level Security error, you MUST run the SQL snippet in your Supabase SQL editor to allow Admins to update rows)`);
         } finally {
             setUploadingId(null);
         }
@@ -223,9 +223,9 @@ export default function AdminHub() {
                 return next;
             });
 
-        } catch (err) {
+        } catch (err: any) {
             console.error('Fulfillment error:', err);
-            alert('Failed to fulfill custom bot. Check console.');
+            alert(`Upload Failed: ${err.message || 'Check console'}\n\n(If you see a Row-Level Security error, you MUST run the SQL snippet in your Supabase SQL editor to allow Admins to update rows)`);
         } finally {
             setUploadingId(null);
         }
