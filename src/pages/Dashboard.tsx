@@ -5,6 +5,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, LogOut, CheckCircle2, ShieldAlert, Clock, LayoutDashboard, Copy, Shield, Download, AlertTriangle, Send, Loader2, Code2, ChevronRight, Calendar } from 'lucide-react';
 import CopytradingForm from '../components/CopytradingForm';
 import AutomationRequest from '../components/AutomationRequest';
+import ConsultationModal from '../components/ConsultationModal';
 
 interface CopytradingAccount {
     id: string;
@@ -69,6 +70,7 @@ export default function Dashboard() {
     );
     const [showConnectForm, setShowConnectForm] = useState(searchParams.get('action') === 'connect');
     const [showCustomBuildForm, setShowCustomBuildForm] = useState(false);
+    const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
 
     // Recovery Form States
     const [recoveryForm, setRecoveryForm] = useState({
@@ -761,6 +763,9 @@ export default function Dashboard() {
                                     <h2 className="text-2xl font-black uppercase tracking-tighter">My Consultations</h2>
                                     <p className="text-xs text-white/40 font-medium uppercase tracking-widest mt-1">Scheduled calls with PiptoPip experts</p>
                                 </div>
+                                <button onClick={() => setIsConsultationModalOpen(true)} className="bg-white/10 hover:bg-white text-white hover:text-black font-black uppercase tracking-widest text-[10px] px-6 py-3 rounded-xl transition-all border border-white/20 hover:border-white">
+                                    + Book New Call
+                                </button>
                             </div>
 
                             {loading ? (
@@ -774,9 +779,9 @@ export default function Dashboard() {
                                     <Calendar className="w-10 h-10 text-white/20 mb-4" />
                                     <h3 className="text-xl font-black uppercase tracking-tighter mb-2">No Scheduled Calls</h3>
                                     <p className="text-sm text-white/50 max-w-md mb-8">You haven't booked any expert consultation sessions yet.</p>
-                                    <a href="/#services" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
-                                        View Advisory Services
-                                    </a>
+                                    <button onClick={() => setIsConsultationModalOpen(true)} className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
+                                        Book Consultation
+                                    </button>
                                 </div>
                             ) : (
                                 <div className="grid gap-4">
@@ -808,6 +813,8 @@ export default function Dashboard() {
                     )}
                 </div>
             </main>
+
+            <ConsultationModal isOpen={isConsultationModalOpen} onClose={() => setIsConsultationModalOpen(false)} />
         </div>
     );
 }
