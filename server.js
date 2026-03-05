@@ -66,7 +66,8 @@ app.post('/api/pesapal-checkout', async (req, res) => {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
-        const numericPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
+        const match = String(price).match(/[0-9.]+/);
+        const numericPrice = match ? parseFloat(match[0]) : 0;
         const authToken = await getPesapalToken();
 
         // Register IPN securely
