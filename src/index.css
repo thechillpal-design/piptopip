@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&display=swap');
+
+@theme {
+  --color-pippin: #F97316;
+  --color-pippin-dark: #C2410C;
+  --color-void: #050505;
+  --color-cyber: #0EA5E9;
+  --font-outfit: "Outfit", sans-serif;
+  --animate-glow-pulse: glow-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-scan: scan 3s linear infinite;
+
+  @keyframes glow-pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.5;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes scan {
+    0% {
+      top: 0%;
+    }
+
+    100% {
+      top: 100%;
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+body {
+  @apply bg-void text-white font-outfit overflow-x-hidden;
+  cursor: default;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pippin);
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl;
+}
+
+.glass-card {
+  @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-500;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  @apply border-pippin/50 bg-white/[0.08];
+  transform: translateY(-8px) translateZ(0);
+}
+
+/* Typography Enhancements */
+.text-glow {
+  text-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+}
+
+.heading-ultra {
+  @apply text-6xl md:text-8xl font-black tracking-tighter uppercase leading-[0.9];
+}
+
+/* Interactive Elements */
+.btn-primary {
+  @apply relative px-8 py-4 bg-pippin text-black font-black uppercase tracking-widest rounded-xl hover:bg-white transition-all duration-500 active:scale-95;
+}
+
+.glow-orb {
+  @apply absolute rounded-full blur-[100px] pointer-events-none;
+}
