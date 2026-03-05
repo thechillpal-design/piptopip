@@ -802,13 +802,14 @@ export default function Dashboard() {
                                             <div className="flex flex-col items-end gap-3 justify-between md:justify-end border-t border-white/10 md:border-none pt-4 md:pt-0">
                                                 <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border ${consultation.status === 'completed' ? 'border-green-500/20 text-green-400 bg-green-500/10' :
                                                     consultation.status === 'canceled' ? 'border-red-500/20 text-red-400 bg-red-500/10' :
-                                                        'border-yellow-500/20 text-yellow-500 bg-yellow-500/10'
+                                                        consultation.status === 'pending_payment' ? 'border-orange-500/20 text-orange-400 bg-orange-500/10' :
+                                                            'border-yellow-500/20 text-yellow-500 bg-yellow-500/10'
                                                     }`}>
-                                                    {consultation.status}
+                                                    {consultation.status === 'pending_payment' ? 'Processing' : consultation.status}
                                                 </span>
                                                 {consultation.meeting_url && (
                                                     <a
-                                                        href={consultation.meeting_url}
+                                                        href={consultation.meeting_url.startsWith('http') ? consultation.meeting_url : `https://${consultation.meeting_url}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="px-4 py-2 bg-pippin text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-white transition-all text-center"
