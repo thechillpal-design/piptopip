@@ -40,13 +40,17 @@ export default function CheckoutPage() {
                 return;
             }
 
+            // Extract just the numerical base price before sending to backend
+            // This guarantees the old backend code doesn't concatenate numbers safely
+            const safeNumericPrice = String(price).match(/[0-9.]+/)?.[0] || "0";
+
             // Normal logic starts here
             const response = await fetch('http://localhost:3001/api/pesapal-checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     plan,
-                    price,
+                    price: safeNumericPrice,
                     type,
                     email: user.email,
                     userId: user.id,
