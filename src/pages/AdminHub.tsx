@@ -314,9 +314,9 @@ export default function AdminHub() {
             if (overrideLink !== undefined || linkToSave !== undefined) {
                 alert('Meeting Link Updated successfully.');
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error('Update error:', err);
-            alert('Failed to update consultation.');
+            alert(`Failed to update consultation: ${err.message || 'Unknown error'}`);
         }
     };
 
