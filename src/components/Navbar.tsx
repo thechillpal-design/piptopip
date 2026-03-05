@@ -20,14 +20,14 @@ export default function Navbar() {
     return (
         <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-6">
             <div className="max-w-7xl mx-auto flex items-center justify-between glass-panel px-6 py-4 border-white/5">
-                <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-pippin rounded-lg flex items-center justify-center">
+                <Link to="/" className="flex items-center gap-2 group">
+                    <div className="w-10 h-10 bg-pippin rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
                         <span className="text-black font-black text-xl">P</span>
                     </div>
-                    <span className="text-2xl font-black tracking-tighter uppercase italic">
-                        Pip<span className="text-pippin">to</span>Pip
+                    <span className="text-2xl font-black tracking-tighter uppercase italic group-hover:text-pippin transition-colors">
+                        Pip<span className="text-pippin group-hover:text-white transition-colors">to</span>Pip
                     </span>
-                </div>
+                </Link>
 
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-8">

@@ -230,8 +230,8 @@ export default function Dashboard() {
         <div className="min-h-screen bg-[#0A0A0A] w-full flex flex-col md:flex-row font-sans text-white">
 
             {/* SIDEBAR NAVIGATION */}
-            <aside className="w-full md:w-64 bg-[#111111] border-r border-white/5 flex flex-col z-10 shrink-0">
-                <div className="h-20 flex items-center px-6 border-b border-white/5 shrink-0">
+            <aside className="w-full md:w-64 bg-[#111111] md:border-r border-b md:border-b-0 border-white/5 flex flex-col z-10 shrink-0 sticky top-0 md:relative">
+                <div className="hidden md:flex h-20 items-center px-6 border-b border-white/5 shrink-0">
                     <Link to="/" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-pippin/10 rounded-lg flex items-center justify-center border border-pippin/20 group-hover:bg-pippin/20 transition-all">
                             <span className="text-pippin font-black text-xl">P</span>
@@ -242,42 +242,42 @@ export default function Dashboard() {
                     </Link>
                 </div>
 
-                <div className="flex flex-col p-4 gap-2 flex-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30 px-4 mb-2 mt-4">Menu</span>
+                <div className="flex flex-row md:flex-col p-2 md:p-4 gap-2 overflow-x-auto md:overflow-visible shrink-0 md:flex-1 w-full hide-scrollbar no-scrollbar">
+                    <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-white/30 px-4 mb-2 mt-4">Menu</span>
 
                     <button
                         onClick={() => setActiveTab('overview')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
+                        className={`flex items-center justify-center md:justify-start gap-2 md:gap-3 px-4 py-3 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${activeTab === 'overview' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
                     >
-                        <LayoutDashboard className="w-4 h-4" /> Accounts
+                        <LayoutDashboard className="w-4 h-4 hidden md:block" /> Accounts
                     </button>
 
                     <button
                         onClick={() => setActiveTab('recovery')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'recovery' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
+                        className={`flex items-center justify-center md:justify-start gap-2 md:gap-3 px-4 py-3 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${activeTab === 'recovery' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
                     >
-                        <Shield className="w-4 h-4" /> Capital Recovery
+                        <Shield className="w-4 h-4 hidden md:block" /> Recovery
                     </button>
 
                     <button
                         onClick={() => setActiveTab('downloads')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'downloads' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
+                        className={`flex items-center justify-center md:justify-start gap-2 md:gap-3 px-4 py-3 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${activeTab === 'downloads' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
                     >
-                        <Download className="w-4 h-4" /> Downloads
+                        <Download className="w-4 h-4 hidden md:block" /> Downloads
                     </button>
 
                     <button
                         onClick={() => setActiveTab('custombuilds')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'custombuilds' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
+                        className={`flex items-center justify-center md:justify-start gap-2 md:gap-3 px-4 py-3 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${activeTab === 'custombuilds' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
                     >
-                        <Code2 className="w-4 h-4" /> Custom Builds
+                        <Code2 className="w-4 h-4 hidden md:block" /> Custom EA
                     </button>
 
                     <button
                         onClick={() => setActiveTab('consultations')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'consultations' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
+                        className={`flex items-center justify-center md:justify-start gap-2 md:gap-3 px-4 py-3 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${activeTab === 'consultations' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
                     >
-                        <Calendar className="w-4 h-4" /> Consultations
+                        <Calendar className="w-4 h-4 hidden md:block" /> Advisory
                     </button>
                 </div>
 
