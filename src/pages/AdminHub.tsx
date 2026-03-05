@@ -77,11 +77,12 @@ export default function AdminHub() {
         const fetchData = async () => {
             setLoading(true);
 
-            // Fetch unfulfilled standard algorithms
+            // Fetch all unfulfilled standard products (Algorithms OR Courses)
+            // They wait for the Admin to upload the delivery file (ex4, zip, pdf, video)
             const { data: purData } = await supabase
                 .from('user_purchases')
                 .select('*')
-                .eq('product_type', 'Algorithm')
+                .neq('product_type', 'Copytrading')
                 .or('download_url.eq.https://example.com/secure-download,download_url.is.null');
 
             if (purData) setPurchases(purData);
