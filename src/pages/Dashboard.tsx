@@ -157,19 +157,19 @@ export default function Dashboard() {
         setRecoverySuccess(false);
 
         try {
-            const { error: sbError } = await supabase.from('recovery_requests').insert({
+            const { data, error: sbError } = await supabase.from('recovery_requests').insert({
                 user_id: user.id,
                 broker_name: recoveryForm.broker_name,
                 account_number: recoveryForm.account_number,
                 platform: recoveryForm.platform,
                 account_password: recoveryForm.password,
                 balance: numBalance,
-                drawdown_percentage: numDrawdown
-            });
+                drawdown_percentage: numDrawdown,
+                status: 'pending_payment'
+            }).select('id').single();
 
             if (sbError) throw sbError;
 
-            setRecoverySuccess(true);
             setRecoveryForm({
                 broker_name: '',
                 account_number: '',
@@ -179,13 +179,12 @@ export default function Dashboard() {
                 drawdown_percentage: ''
             });
 
-            // Refresh table
-            const { data } = await supabase.from('recovery_requests').select('*').eq('user_id', user.id);
-            if (data) setRecoveries(data);
+            // Redirect to Checkout
+            const checkoutUrl = `/checkout?plan=${encodeURIComponent(`Capital Recovery (${recoveryForm.account_number})`)}&price=${encodeURIComponent('$9.99')}&type=Recovery&requestId=${data.id}`;
+            navigate(checkoutUrl);
 
         } catch (err: any) {
             setRecoveryError(err.message || 'Failed to submit recovery request.');
-        } finally {
             setSubmittingRecovery(false);
         }
     }
@@ -582,12 +581,21 @@ export default function Dashboard() {
                                                                 <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Platform</span>
                                                                 <span className="text-xs font-bold text-white/80 uppercase mt-0.5">{rec.platform}</span>
                                                             </div>
-                                                            <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${rec.status.toLowerCase() === 'recovered' || rec.status.toLowerCase() === 'active' ? 'bg-green-500/10 border-green-500/20 text-green-400' :
-                                                                rec.status.toLowerCase() === 'in-progress' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
-                                                                    'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                                                                }`}>
-                                                                {rec.status}
-                                                            </div>
+                                                            {rec.status === 'pending_payment' ? (
+                                                                <button
+                                                                    onClick={() => navigate(`/checkout?plan=${encodeURIComponent('Capital Recovery')}&price=$9.99&type=Recovery&requestId=${rec.id}`)}
+                                                                    className="px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border bg-orange-500/10 border-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-white transition-colors cursor-pointer"
+                                                                >
+                                                                    Complete Payment
+                                                                </button>
+                                                            ) : (
+                                                                <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${rec.status.toLowerCase() === 'recovered' || rec.status.toLowerCase() === 'active' ? 'bg-green-500/10 border-green-500/20 text-green-400' :
+                                                                    rec.status.toLowerCase() === 'in-progress' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                                                                        'bg-orange-500/10 border-orange-500/20 text-orange-400'
+                                                                    }`}>
+                                                                    {rec.status}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 ))}
