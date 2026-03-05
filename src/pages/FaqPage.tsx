@@ -31,7 +31,7 @@ export default function FaqPage() {
 
                     <div>
                         <h3 className="text-lg font-bold text-white mb-2 uppercase tracking-widest">How quickly are Custom EAs delivered?</h3>
-                        <p>Standard logic takes between 3-5 business days. Highly complex algorithms requiring neural network integration or advanced high-frequency hedging can take up to 14 days.</p>
+                        <p>EA development times vary significantly based on project complexity. Standard algorithms check in at 7 days or less, while highly advanced, custom-scoped projects can require ongoing development spanning 6 to 12 months or more.</p>
                     </div>
 
                 </div>
