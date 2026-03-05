@@ -366,9 +366,9 @@ export default function Dashboard() {
                                     {accountLimit === 0 ? (
                                         <>
                                             <p className="text-sm text-white/50 max-w-md mb-8">You need an active Copytrading plan to securely connect a broker.</p>
-                                            <Link to="/#copytrading" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
+                                            <a href="/#copytrading" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
                                                 View Plans
-                                            </Link>
+                                            </a>
                                         </>
                                     ) : (
                                         <>
@@ -620,9 +620,9 @@ export default function Dashboard() {
                                     <ShieldAlert className="w-10 h-10 text-white/20 mb-4" />
                                     <h3 className="text-xl font-black uppercase tracking-tighter mb-2">No Active Purchases</h3>
                                     <p className="text-sm text-white/50 max-w-md mb-8">You haven't purchased any algorithms or courses yet.</p>
-                                    <Link to="/#pricing" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
+                                    <a href="/#services" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
                                         View Products
-                                    </Link>
+                                    </a>
                                 </div>
                             ) : (
                                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -774,9 +774,9 @@ export default function Dashboard() {
                                     <Calendar className="w-10 h-10 text-white/20 mb-4" />
                                     <h3 className="text-xl font-black uppercase tracking-tighter mb-2">No Scheduled Calls</h3>
                                     <p className="text-sm text-white/50 max-w-md mb-8">You haven't booked any expert consultation sessions yet.</p>
-                                    <Link to="/#recovery" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
+                                    <a href="/#services" className="px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-pippin transition-all">
                                         View Advisory Services
-                                    </Link>
+                                    </a>
                                 </div>
                             ) : (
                                 <div className="grid gap-4">
