@@ -320,6 +320,18 @@ export default function AdminHub() {
         }
     };
 
+    const deleteRecord = async (table: string, id: string, setter: any) => {
+        if (!window.confirm(`Are you sure you want to delete this record? This action cannot be undone.`)) return;
+        try {
+            const { error } = await supabase.from(table).delete().eq('id', id);
+            if (error) throw error;
+            setter((prev: any[]) => prev.filter(item => item.id !== id));
+        } catch (err: any) {
+            console.error('Delete error:', err);
+            alert(`Failed to delete record: ${err.message || 'Unknown error'}`);
+        }
+    };
+
     if (authLoading) return <div className="min-h-screen bg-[#0A0A0A]" />;
 
     if (!user) {
@@ -612,6 +624,12 @@ export default function AdminHub() {
                                                     >
                                                         Disabled
                                                     </button>
+                                                    <button
+                                                        onClick={() => deleteRecord('copytrading_accounts', cp.id, setCopyAccounts)}
+                                                        className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-colors bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white ml-2"
+                                                    >
+                                                        Delete
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
@@ -662,6 +680,12 @@ export default function AdminHub() {
                                                     >
                                                         Disabled
                                                     </button>
+                                                    <button
+                                                        onClick={() => deleteRecord('recovery_requests', rec.id, setRecoveries)}
+                                                        className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-colors bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white ml-2"
+                                                    >
+                                                        Delete
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
@@ -689,6 +713,9 @@ export default function AdminHub() {
                                                     <div className="flex items-center gap-2 mb-2">
                                                         <h3 className="text-sm font-black uppercase text-white tracking-widest">{new Date(cons.date).toLocaleDateString()} - {cons.time_slot}</h3>
                                                         <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded font-bold uppercase">{cons.contact_method}</span>
+                                                        {cons.status === 'pending_payment' && (
+                                                            <span className="text-[10px] bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded font-bold uppercase">Pending Payment</span>
+                                                        )}
                                                     </div>
                                                     <p className="text-[10px] text-white/50 uppercase tracking-widest mt-1">User: {cons.user_id}</p>
                                                     {cons.notes && (
@@ -734,6 +761,12 @@ export default function AdminHub() {
                                                         >
                                                             Canceled
                                                         </button>
+                                                        <button
+                                                            onClick={() => deleteRecord('consultations', cons.id, setConsultations)}
+                                                            className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-colors bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white ml-2"
+                                                        >
+                                                            Delete
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -762,14 +795,23 @@ export default function AdminHub() {
                                                 <tr className="border-b border-white/10">
                                                     <th className="p-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Email Address</th>
                                                     <th className="p-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Subscribed Date</th>
+                                                    <th className="p-4 text-[10px] font-black text-white/40 uppercase tracking-widest text-right">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {leads.map(lead => (
                                                     <tr key={lead.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                                                         <td className="p-4 text-sm font-bold text-white border-r border-white/5">{lead.email}</td>
-                                                        <td className="p-4 text-[10px] tracking-widest uppercase text-white/60">
+                                                        <td className="p-4 text-[10px] tracking-widest uppercase text-white/60 border-r border-white/5">
                                                             {new Date(lead.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                        </td>
+                                                        <td className="p-4 text-right">
+                                                            <button
+                                                                onClick={() => deleteRecord('newsletter_leads', lead.id, setLeads)}
+                                                                className="px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-md text-[9px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors"
+                                                            >
+                                                                Delete
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 ))}

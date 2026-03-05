@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/useAuth';
 import { supabase } from '../lib/supabase';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, LogOut, CheckCircle2, ShieldAlert, Clock, LayoutDashboard, Copy, Shield, Download, AlertTriangle, Send, Loader2, Code2, ChevronRight, Calendar } from 'lucide-react';
+import { ChevronLeft, LogOut, CheckCircle2, ShieldAlert, Clock, LayoutDashboard, Copy, Shield, Download, AlertTriangle, Send, Loader2, Code2, ChevronRight, Calendar, Video } from 'lucide-react';
 import CopytradingForm from '../components/CopytradingForm';
 import AutomationRequest from '../components/AutomationRequest';
 import ConsultationModal from '../components/ConsultationModal';
@@ -800,22 +800,32 @@ export default function Dashboard() {
                                             </div>
 
                                             <div className="flex flex-col items-end gap-3 justify-between md:justify-end border-t border-white/10 md:border-none pt-4 md:pt-0">
-                                                <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border ${consultation.status === 'completed' ? 'border-green-500/20 text-green-400 bg-green-500/10' :
-                                                    consultation.status === 'canceled' ? 'border-red-500/20 text-red-400 bg-red-500/10' :
-                                                        consultation.status === 'pending_payment' ? 'border-orange-500/20 text-orange-400 bg-orange-500/10' :
-                                                            'border-yellow-500/20 text-yellow-500 bg-yellow-500/10'
-                                                    }`}>
-                                                    {consultation.status === 'pending_payment' ? 'Processing' : consultation.status}
-                                                </span>
-                                                {consultation.meeting_url && (
+                                                {consultation.status === 'pending_payment' ? (
                                                     <a
-                                                        href={consultation.meeting_url.startsWith('http') ? consultation.meeting_url : `https://${consultation.meeting_url}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="px-4 py-2 bg-pippin text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-white transition-all text-center"
+                                                        href={`/checkout?plan=Expert%20Consultation&price=9.99&type=CONSULTATION&requestId=${consultation.id}`}
+                                                        className="px-4 py-2 bg-pippin text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-white transition-all text-center flex items-center gap-2"
                                                     >
-                                                        Join Meeting
+                                                        Complete Payment <ChevronRight className="w-3 h-3" />
                                                     </a>
+                                                ) : (
+                                                    <>
+                                                        <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border ${consultation.status === 'completed' ? 'border-green-500/20 text-green-400 bg-green-500/10' :
+                                                            consultation.status === 'canceled' ? 'border-red-500/20 text-red-400 bg-red-500/10' :
+                                                                'border-yellow-500/20 text-yellow-500 bg-yellow-500/10'
+                                                            }`}>
+                                                            {consultation.status}
+                                                        </span>
+                                                        {consultation.meeting_url && (
+                                                            <a
+                                                                href={consultation.meeting_url.startsWith('http') ? consultation.meeting_url : `https://${consultation.meeting_url}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="px-4 py-2 bg-pippin text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-white transition-all text-center flex items-center gap-2"
+                                                            >
+                                                                <Video className="w-3 h-3" /> Join Meeting
+                                                            </a>
+                                                        )}
+                                                    </>
                                                 )}
                                             </div>
                                         </div>
