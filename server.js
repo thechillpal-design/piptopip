@@ -212,23 +212,40 @@ app.all('/api/pesapal-ipn', async (req, res) => {
                 }
             }
         }
+    }
+        } else if (txData.payment_status_description?.toUpperCase() === 'FAILED' || txData.payment_status_description?.toUpperCase() === 'INVALID') {
+    if (orderMerchantReference && orderMerchantReference.startsWith("PIPTOPIP-")) {
+        const refParts = orderMerchantReference.split('_REQ_');
+        const baseReference = refParts[0];
+        const parts = baseReference.split('-');
+        const type = parts[1];
+        const actualUserId = parts.slice(2, parts.length - 1).join('-');
 
-        return res.status(200).json({
-            orderNotificationType: orderNotificationType,
-            orderTrackingId: orderTrackingId,
-            orderMerchantReference: orderMerchantReference,
-            status: 200
-        });
+        // If a recurring copytrading payment fails, aggressively disable their connected accounts
+        if (type === 'COPYTRADING' || orderNotificationType === "RECURRING" || txData.subscription_transaction_info) {
+            await supabase.from('copytrading_accounts')
+                .update({ status: 'disabled' })
+                .eq('user_id', actualUserId);
+        }
+    }
+}
+
+return res.status(200).json({
+    orderNotificationType: orderNotificationType,
+    orderTrackingId: orderTrackingId,
+    orderMerchantReference: orderMerchantReference,
+    status: 200
+});
 
     } catch (err) {
-        console.error("IPN Parse Error:", err.message);
-        return res.status(500).json({
-            orderNotificationType: "RECURRING",
-            orderTrackingId: "",
-            orderMerchantReference: "",
-            status: 500
-        });
-    }
+    console.error("IPN Parse Error:", err.message);
+    return res.status(500).json({
+        orderNotificationType: "RECURRING",
+        orderTrackingId: "",
+        orderMerchantReference: "",
+        status: 500
+    });
+}
 });
 
 

@@ -11,8 +11,8 @@ export default function ConsultationModal({ isOpen, onClose }: { isOpen: boolean
     const [isAuthOpen, setIsAuthOpen] = useState(false);
 
     const [date, setDate] = useState('');
-    const [timeSlot, setTimeSlot] = useState('Morning (9AM - 12PM EST)');
-    const [contactMethod, setContactMethod] = useState('Google Meet');
+    const [timeSlot, setTimeSlot] = useState('');
+    const [contactMethod, setContactMethod] = useState('Google Meet Link');
     const [notes, setNotes] = useState('');
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -145,15 +145,13 @@ export default function ConsultationModal({ isOpen, onClose }: { isOpen: boolean
                             <label className="text-[10px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2 mb-2">
                                 <Clock className="w-3 h-3" /> Preferred Time Slot
                             </label>
-                            <select
+                            <input
+                                type="time"
+                                required
                                 value={timeSlot}
                                 onChange={(e) => setTimeSlot(e.target.value)}
-                                className="w-full bg-[#1A1A1A] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pippin/50 appearance-none"
-                            >
-                                <option>Morning (9AM - 12PM EST)</option>
-                                <option>Afternoon (1PM - 4PM EST)</option>
-                                <option>Evening (5PM - 8PM EST)</option>
-                            </select>
+                                className="w-full bg-[#1A1A1A] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pippin/50 calendar-picker-dark"
+                            />
                         </div>
 
                         <div>

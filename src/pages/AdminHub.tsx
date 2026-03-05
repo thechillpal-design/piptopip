@@ -43,6 +43,18 @@ interface RecoveryRequest {
     created_at: string;
 }
 
+interface Consultation {
+    id: string;
+    user_id: string;
+    date: string;
+    time_slot: string;
+    contact_method: string;
+    notes: string;
+    status: string;
+    meeting_url?: string;
+    created_at: string;
+}
+
 interface NewsletterLead {
     id: string;
     email: string;
@@ -63,9 +75,17 @@ export default function AdminHub() {
     const [customBuilds, setCustomBuilds] = useState<CustomBuildFulfillment[]>([]);
     const [copyAccounts, setCopyAccounts] = useState<CopytradingAccount[]>([]);
     const [recoveries, setRecoveries] = useState<RecoveryRequest[]>([]);
+    const [consultations, setConsultations] = useState<Consultation[]>([]);
     const [leads, setLeads] = useState<NewsletterLead[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'fulfillments' | 'copytrading' | 'recovery' | 'leads'>('fulfillments');
+    const [activeTab, setActiveTab] = useState<'fulfillments' | 'copytrading' | 'recovery' | 'consultations' | 'leads'>('fulfillments');
+
+    // Meeting link input state map
+    const [meetingLinks, setMeetingLinks] = useState<{ [key: string]: string }>({});
+
+    // Filter states
+    const [accountSearch, setAccountSearch] = useState('');
+    const [accountStatusFilter, setAccountStatusFilter] = useState('all');
 
     // File Upload State mapping { id: File }
     const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File }>({});
@@ -110,6 +130,14 @@ export default function AdminHub() {
                 .order('created_at', { ascending: false });
 
             if (recData) setRecoveries(recData);
+
+            // Fetch consultations
+            const { data: consData } = await supabase
+                .from('consultations')
+                .select('*')
+                .order('date', { ascending: true });
+
+            if (consData) setConsultations(consData);
 
             // Fetch leads
             const { data: leadsData } = await supabase
@@ -263,6 +291,35 @@ export default function AdminHub() {
         }
     };
 
+    const updateConsultation = async (id: string, newStatus?: string, overrideLink?: string) => {
+        try {
+            const updates: any = {};
+            if (newStatus) updates.status = newStatus;
+
+            const linkToSave = overrideLink !== undefined ? overrideLink : meetingLinks[id];
+            if (linkToSave !== undefined) {
+                updates.meeting_url = linkToSave;
+            }
+
+            if (Object.keys(updates).length === 0) return;
+
+            const { error } = await supabase
+                .from('consultations')
+                .update(updates)
+                .eq('id', id);
+
+            if (error) throw error;
+
+            setConsultations(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+            if (overrideLink !== undefined || linkToSave !== undefined) {
+                alert('Meeting Link Updated successfully.');
+            }
+        } catch (err) {
+            console.error('Update error:', err);
+            alert('Failed to update consultation.');
+        }
+    };
+
     if (authLoading) return <div className="min-h-screen bg-[#0A0A0A]" />;
 
     if (!user) {
@@ -356,6 +413,12 @@ export default function AdminHub() {
                         className={`px-6 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === 'recovery' ? 'bg-[#9900FF] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}
                     >
                         <ShieldAlert className="w-4 h-4" /> Capital Recovery
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('consultations')}
+                        className={`px-6 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === 'consultations' ? 'bg-green-500 text-black' : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}
+                    >
+                        <Activity className="w-4 h-4" /> Consultations
                     </button>
                     <button
                         onClick={() => setActiveTab('leads')}
@@ -477,18 +540,53 @@ export default function AdminHub() {
 
                         {activeTab === 'copytrading' && (
                             <div className="glass-card p-6 border-white/5 animate-in fade-in slide-in-from-bottom-4">
-                                <h2 className="text-xl font-black uppercase tracking-tighter mb-6 flex items-center gap-3">
-                                    <Copy className="w-5 h-5 text-pippin" /> Copytrading Accounts
-                                </h2>
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                    <h2 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3">
+                                        <Copy className="w-5 h-5 text-pippin" /> Copytrading Accounts
+                                    </h2>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            placeholder="Search accounts..."
+                                            value={accountSearch}
+                                            onChange={(e) => setAccountSearch(e.target.value)}
+                                            className="bg-[#111111] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:border-pippin outline-none"
+                                        />
+                                        <select
+                                            value={accountStatusFilter}
+                                            onChange={(e) => setAccountStatusFilter(e.target.value)}
+                                            className="bg-[#111111] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:border-pippin outline-none"
+                                        >
+                                            <option value="all">All Status</option>
+                                            <option value="active">Active</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="disabled">Disabled</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                                {copyAccounts.length === 0 ? (
+                                {copyAccounts.filter(cp => {
+                                    const searchLower = accountSearch.toLowerCase();
+                                    const matchesSearch = cp.account_number.toLowerCase().includes(searchLower) ||
+                                        cp.broker_name.toLowerCase().includes(searchLower) ||
+                                        cp.user_id.toLowerCase().includes(searchLower);
+                                    const matchesStatus = accountStatusFilter === 'all' || cp.status === accountStatusFilter;
+                                    return matchesSearch && matchesStatus;
+                                }).length === 0 ? (
                                     <div className="text-center py-10 bg-white/5 rounded-xl border border-white/5">
                                         <Activity className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                                        <p className="text-xs text-white/40 uppercase tracking-widest font-black">No Accounts Connected</p>
+                                        <p className="text-xs text-white/40 uppercase tracking-widest font-black">No Accounts Found</p>
                                     </div>
                                 ) : (
                                     <div className="grid gap-4">
-                                        {copyAccounts.map(cp => (
+                                        {copyAccounts.filter(cp => {
+                                            const searchLower = accountSearch.toLowerCase();
+                                            const matchesSearch = cp.account_number.toLowerCase().includes(searchLower) ||
+                                                cp.broker_name.toLowerCase().includes(searchLower) ||
+                                                cp.user_id.toLowerCase().includes(searchLower);
+                                            const matchesStatus = accountStatusFilter === 'all' || cp.status === accountStatusFilter;
+                                            return matchesSearch && matchesStatus;
+                                        }).map(cp => (
                                             <div key={cp.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                                 <div>
                                                     <h3 className="text-sm font-black uppercase text-white tracking-widest">{cp.broker_name} - {cp.account_number}</h3>
@@ -564,6 +662,79 @@ export default function AdminHub() {
                                                     >
                                                         Disabled
                                                     </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {activeTab === 'consultations' && (
+                            <div className="glass-card p-6 border-white/5 animate-in fade-in slide-in-from-bottom-4">
+                                <h2 className="text-xl font-black uppercase tracking-tighter mb-6 flex items-center gap-3">
+                                    <Activity className="w-5 h-5 text-green-500" /> Scheduled Consultations
+                                </h2>
+
+                                {consultations.length === 0 ? (
+                                    <div className="text-center py-10 bg-white/5 rounded-xl border border-white/5">
+                                        <Activity className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                                        <p className="text-xs text-white/40 uppercase tracking-widest font-black">No Consultations Scheduled</p>
+                                    </div>
+                                ) : (
+                                    <div className="grid gap-4">
+                                        {consultations.map(cons => (
+                                            <div key={cons.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col md:flex-row md:items-start justify-between gap-4">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <h3 className="text-sm font-black uppercase text-white tracking-widest">{new Date(cons.date).toLocaleDateString()} - {cons.time_slot}</h3>
+                                                        <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded font-bold uppercase">{cons.contact_method}</span>
+                                                    </div>
+                                                    <p className="text-[10px] text-white/50 uppercase tracking-widest mt-1">User: {cons.user_id}</p>
+                                                    {cons.notes && (
+                                                        <div className="mt-3 p-3 bg-black/50 rounded-lg text-xs text-white/70 border border-white/5">
+                                                            "{cons.notes}"
+                                                        </div>
+                                                    )}
+
+                                                    <div className="mt-4 flex flex-col sm:flex-row gap-2 max-w-md">
+                                                        <input
+                                                            type="text"
+                                                            placeholder={cons.meeting_url || "Paste meeting link here"}
+                                                            value={meetingLinks[cons.id] !== undefined ? meetingLinks[cons.id] : ''}
+                                                            onChange={(e) => setMeetingLinks(prev => ({ ...prev, [cons.id]: e.target.value }))}
+                                                            className="flex-1 bg-[#111111] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:border-pippin outline-none"
+                                                        />
+                                                        <button
+                                                            onClick={() => updateConsultation(cons.id)}
+                                                            className="px-4 py-2 bg-pippin text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-white transition-colors whitespace-nowrap"
+                                                        >
+                                                            Save Link
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-col gap-2">
+                                                    <div className="flex items-center justify-end gap-2 bg-[#111111] p-1.5 rounded-lg border border-white/5">
+                                                        <button
+                                                            onClick={() => updateConsultation(cons.id, 'scheduled')}
+                                                            className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-colors ${cons.status === 'scheduled' ? 'bg-yellow-500 text-black' : 'text-white/40 hover:text-yellow-500'}`}
+                                                        >
+                                                            Scheduled
+                                                        </button>
+                                                        <button
+                                                            onClick={() => updateConsultation(cons.id, 'completed')}
+                                                            className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-colors ${cons.status === 'completed' ? 'bg-green-500 text-black' : 'text-white/40 hover:text-green-500'}`}
+                                                        >
+                                                            Completed
+                                                        </button>
+                                                        <button
+                                                            onClick={() => updateConsultation(cons.id, 'canceled')}
+                                                            className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-colors ${cons.status === 'canceled' ? 'bg-red-500 text-white' : 'text-white/40 hover:text-red-500'}`}
+                                                        >
+                                                            Canceled
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))}

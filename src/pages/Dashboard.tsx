@@ -48,9 +48,10 @@ interface Consultation {
     id: string;
     date: string;
     time_slot: string;
-    contact_method: string;
     notes: string;
     status: string;
+    contact_method: string;
+    meeting_url?: string;
 }
 
 export default function Dashboard() {
@@ -279,7 +280,7 @@ export default function Dashboard() {
                         onClick={() => setActiveTab('consultations')}
                         className={`flex items-center justify-center md:justify-start gap-2 md:gap-3 px-4 py-3 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${activeTab === 'consultations' ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5 hover:text-white'}`}
                     >
-                        <Calendar className="w-4 h-4 hidden md:block" /> Advisory
+                        <Calendar className="w-4 h-4 hidden md:block" /> Schedule a Consultation
                     </button>
                 </div>
 
@@ -641,6 +642,7 @@ export default function Dashboard() {
                                                 href={purchase.download_url || '#'}
                                                 target={purchase.download_url ? "_blank" : "_self"}
                                                 rel="noopener noreferrer"
+                                                download={purchase.download_url ? true : undefined}
                                                 className={`mt-auto pt-6 border-t border-white/5 flex items-center justify-between transition-colors ${purchase.download_url ? 'group-hover:text-white text-white/50' : 'text-white/20 cursor-not-allowed'}`}
                                             >
                                                 <span className="text-[10px] font-black uppercase tracking-widest">
@@ -797,13 +799,23 @@ export default function Dashboard() {
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-center gap-4 justify-between md:justify-end border-t border-white/10 md:border-none pt-4 md:pt-0">
+                                            <div className="flex flex-col items-end gap-3 justify-between md:justify-end border-t border-white/10 md:border-none pt-4 md:pt-0">
                                                 <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border ${consultation.status === 'completed' ? 'border-green-500/20 text-green-400 bg-green-500/10' :
                                                     consultation.status === 'canceled' ? 'border-red-500/20 text-red-400 bg-red-500/10' :
                                                         'border-yellow-500/20 text-yellow-500 bg-yellow-500/10'
                                                     }`}>
                                                     {consultation.status}
                                                 </span>
+                                                {consultation.meeting_url && (
+                                                    <a
+                                                        href={consultation.meeting_url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="px-4 py-2 bg-pippin text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-white transition-all text-center"
+                                                    >
+                                                        Join Meeting
+                                                    </a>
+                                                )}
                                             </div>
                                         </div>
                                     ))}

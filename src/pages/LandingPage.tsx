@@ -9,8 +9,15 @@ import PricingCopytrading from '../components/PricingCopytrading';
 import PricingRecovery from '../components/PricingRecovery';
 import AutomationRequest from '../components/AutomationRequest';
 import PipForgeAcademy from '../components/PipForgeAcademy';
+import AuthModal from '../components/AuthModal';
+import { useAuth } from '../lib/useAuth';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function LandingPage() {
+    const { user } = useAuth();
+    const [isAuthOpen, setIsAuthOpen] = useState(false);
+
     return (
         <div className="relative w-full min-h-screen">
             {/* 3D Kinetic Background stays behind everything */}
@@ -55,9 +62,17 @@ export default function LandingPage() {
                                 <p className="text-white/40 mb-12 font-medium uppercase tracking-[0.2em] text-[10px]">
                                     Join the Piptopip ecosystem today and start trading with confidence.
                                 </p>
-                                <button className="btn-primary scale-110">
-                                    Join the Network
-                                </button>
+                                {user ? (
+                                    <Link to="/dashboard">
+                                        <button className="btn-primary scale-110">
+                                            Open Dashboard
+                                        </button>
+                                    </Link>
+                                ) : (
+                                    <button onClick={() => setIsAuthOpen(true)} className="btn-primary scale-110">
+                                        Join the Network
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </section>
@@ -65,6 +80,8 @@ export default function LandingPage() {
 
                 <Footer />
             </div>
+
+            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
             {/* Global Mouse Glow Effect */}
             <div className="fixed inset-0 pointer-events-none z-[999] opacity-20 bg-[radial-gradient(circle_at_var(--mouse-x,50%)_var(--mouse-y,50%),#F97316_0%,transparent_50%)]"

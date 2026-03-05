@@ -7,19 +7,19 @@ const courses = [
         title: 'Forex Foundations',
         tag: 'BEGINNER',
         price: 'FREE',
-        materials: ['12 Video Modules', 'Market Terminology PDF', 'Basic Indicators Guide']
+        materials: ['Video Modules', 'Market Terminology PDF', 'Basic Indicators Guide']
     },
     {
         title: 'Algorithmic Bootcamp',
         tag: 'INTERMEDIATE',
         price: '$45',
-        materials: ['24 Video Modules', 'EA Architecture PDF', 'Risk Models Excel Template']
+        materials: ['Video Modules', 'EA Architecture PDF', 'Risk Models Excel Template']
     },
     {
         title: 'Advanced Price Action',
         tag: 'ADVANCED',
         price: '$180',
-        materials: ['36 Video Modules', 'Advanced Patterns PDF', 'Live Trading Sessions']
+        materials: ['Video Modules', 'Advanced Patterns PDF', 'Live Trading Sessions']
     }
 ];
 

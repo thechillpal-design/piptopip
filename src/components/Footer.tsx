@@ -1,6 +1,7 @@
 import { Twitter, Instagram, Send, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
     const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ export default function Footer() {
     return (
         <footer className="bg-void border-t border-white/5 pt-20 pb-10 px-6">
             <div className="max-w-7xl mx-auto">
-                <div className="grid md:grid-cols-4 gap-12 mb-20">
+                <div className="grid md:grid-cols-5 gap-12 mb-20">
                     <div className="col-span-2">
                         <div className="flex items-center gap-2 mb-8">
                             <div className="w-8 h-8 bg-pippin rounded flex items-center justify-center">
@@ -63,6 +64,17 @@ export default function Footer() {
                                     </a>
                                 </li>
                             ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 mb-8">Company</h5>
+                        <ul className="space-y-4 text-xs font-bold uppercase tracking-widest text-white/80">
+                            <li><Link to="/about" className="hover:text-pippin transition-colors">About</Link></li>
+                            <li><Link to="/faq" className="hover:text-pippin transition-colors">FAQ</Link></li>
+                            <li><Link to="/refund-policy" className="hover:text-pippin transition-colors">14-Day Refund Policy</Link></li>
+                            <li><Link to="/contact" className="hover:text-pippin transition-colors">Contact Support</Link></li>
+                            <li><Link to="/sitemap" className="hover:text-pippin transition-colors">Sitemap</Link></li>
                         </ul>
                     </div>
 
@@ -107,8 +119,8 @@ export default function Footer() {
                         &copy; 2026 PIPTOPIP ECOSYSTEM. ALL RIGHTS RESERVED.
                     </p>
                     <div className="flex gap-8">
-                        <a href="#" className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors">Risk Disclaimer</a>
-                        <a href="#" className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors">Privacy Policy</a>
+                        <Link to="/disclaimer" className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors">Risk Disclaimer</Link>
+                        <Link to="/privacy-policy" className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors">Privacy Policy</Link>
                     </div>
                 </div>
 

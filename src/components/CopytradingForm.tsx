@@ -14,6 +14,7 @@ export default function CopytradingForm({ userTier, onSuccess }: CopytradingForm
     const [platform, setPlatform] = useState('MT4');
     const [broker, setBroker] = useState('');
     const [accountNumber, setAccountNumber] = useState('');
+    const [accountPassword, setAccountPassword] = useState('');
     const [accountSize, setAccountSize] = useState('');
 
     const [loading, setLoading] = useState(false);
@@ -33,7 +34,7 @@ export default function CopytradingForm({ userTier, onSuccess }: CopytradingForm
         const sanitizedBroker = broker.trim().substring(0, 100);
         const sanitizedAccount = accountNumber.replace(/[^a-zA-Z0-9]/g, '').substring(0, 50); // Alphanumeric only
 
-        if (!sanitizedBroker || !sanitizedAccount || !accountSize) {
+        if (!sanitizedBroker || !sanitizedAccount || !accountSize || !accountPassword) {
             setError('Please fill in all details correctly.');
             return;
         }
@@ -60,6 +61,7 @@ export default function CopytradingForm({ userTier, onSuccess }: CopytradingForm
                     user_id: user.id,
                     broker_name: sanitizedBroker,
                     account_number: sanitizedAccount,
+                    account_password: accountPassword,
                     platform: platform,
                     account_size_range: accountSize,
                     subscription_tier: userTier || 'Basic'
@@ -72,6 +74,7 @@ export default function CopytradingForm({ userTier, onSuccess }: CopytradingForm
             setSuccess(true);
             setBroker('');
             setAccountNumber('');
+            setAccountPassword('');
             setAccountSize('');
 
             // Trigger refresh on the parent dashboard
@@ -149,22 +152,38 @@ export default function CopytradingForm({ userTier, onSuccess }: CopytradingForm
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2">
-                            Initial Account Size (USD)
-                        </label>
-                        <select
-                            required
-                            value={accountSize}
-                            onChange={(e) => setAccountSize(e.target.value)}
-                            className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm font-bold appearance-none focus:outline-none focus:border-cyber/50 transition-colors text-white"
-                        >
-                            <option value="" disabled>Select approximate balance</option>
-                            <option value="1k-5k">$1,000 - $5,000</option>
-                            <option value="5k-20k">$5,000 - $20,000</option>
-                            <option value="20k-100k">$20,000 - $100,000</option>
-                            <option value="100k+">$100,000+</option>
-                        </select>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2">
+                                Initial Account Size (USD)
+                            </label>
+                            <select
+                                required
+                                value={accountSize}
+                                onChange={(e) => setAccountSize(e.target.value)}
+                                className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm font-bold appearance-none focus:outline-none focus:border-cyber/50 transition-colors text-white"
+                            >
+                                <option value="" disabled>Select approximate balance</option>
+                                <option value="1k-5k">$1,000 - $5,000</option>
+                                <option value="5k-20k">$5,000 - $20,000</option>
+                                <option value="20k-100k">$20,000 - $100,000</option>
+                                <option value="100k+">$100,000+</option>
+                            </select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2">
+                                Master Password
+                            </label>
+                            <input
+                                type="password"
+                                required
+                                value={accountPassword}
+                                onChange={(e) => setAccountPassword(e.target.value)}
+                                placeholder="Trading Password"
+                                className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-cyber/50 transition-colors text-white"
+                            />
+                        </div>
                     </div>
 
                     {error && (
@@ -190,7 +209,7 @@ export default function CopytradingForm({ userTier, onSuccess }: CopytradingForm
                     </button>
 
                     <p className="text-[9px] font-bold text-white/30 text-center uppercase tracking-widest mt-4">
-                        We do not require trading passwords. You will provide strictly read-only or investor credentials.
+                        We require your master trading password to securely connect and mirror the trades to your account directly.
                     </p>
                 </form>
             </div>

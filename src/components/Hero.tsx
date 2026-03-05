@@ -1,4 +1,4 @@
-import { ArrowRight, Play, ShieldAlert } from 'lucide-react';
+import { ArrowRight, ShieldAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Hero() {
@@ -61,12 +61,6 @@ export default function Hero() {
                             Get Started <ArrowRight className="w-5 h-5" />
                         </button>
                     </a>
-                    <button className="group flex items-center gap-4 px-8 py-4 border border-white/10 rounded-xl hover:bg-white/5 transition-all">
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-pippin transition-colors">
-                            <Play className="w-4 h-4 text-white group-hover:text-black fill-current" />
-                        </div>
-                        <span className="text-xs font-black uppercase tracking-widest text-white/70">Watch Vision</span>
-                    </button>
                 </motion.div>
 
 
