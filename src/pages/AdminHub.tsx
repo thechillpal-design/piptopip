@@ -402,7 +402,6 @@ export default function AdminHub() {
                                                     <div className="flex flex-col sm:flex-row gap-3">
                                                         <input
                                                             type="file"
-                                                            accept=".ex4,.ex5,.zip"
                                                             onChange={(e) => handleFileSelect(p.id, e.target.files?.[0] || null)}
                                                             className="flex-1 text-xs text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-white/10 file:text-white hover:file:bg-white/20 file:transition-colors file:cursor-pointer bg-[#111111] rounded-lg p-1"
                                                         />
@@ -456,7 +455,6 @@ export default function AdminHub() {
                                                     <div className="flex flex-col sm:flex-row gap-3">
                                                         <input
                                                             type="file"
-                                                            accept=".ex4,.ex5,.zip"
                                                             onChange={(e) => handleFileSelect(cb.id, e.target.files?.[0] || null)}
                                                             className="flex-1 text-xs text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-white/10 file:text-white hover:file:bg-white/20 file:transition-colors file:cursor-pointer bg-[#111111] rounded-lg p-1"
                                                         />
