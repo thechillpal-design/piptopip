@@ -593,7 +593,7 @@ export default function Dashboard() {
                                                             {rec.status === 'pending_payment' ? (
                                                                 <button
                                                                     onClick={() => {
-                                                                        const dd = parseFloat(rec.drawdown_percentage);
+                                                                        const dd = Number(rec.drawdown_percentage);
                                                                         let fee = 49;
                                                                         if (dd >= 71) fee = 199;
                                                                         else if (dd >= 41) fee = 99;
