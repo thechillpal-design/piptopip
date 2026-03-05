@@ -81,7 +81,7 @@ export default function AdminHub() {
             const { data: purData } = await supabase
                 .from('user_purchases')
                 .select('*')
-                .neq('product_type', 'Copytrading')
+                .eq('product_type', 'Algorithm')
                 .or('download_url.eq.https://example.com/secure-download,download_url.is.null');
 
             if (purData) setPurchases(purData);

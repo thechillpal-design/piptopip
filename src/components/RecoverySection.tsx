@@ -6,9 +6,9 @@ export default function RecoverySection() {
     const [drawdown, setDrawdown] = useState(25);
     const getDetails = () => {
         if (drawdown <= 20) return { label: 'STABLE', color: 'text-green-500', bg: 'bg-green-500/10', fee: 'N/A', message: 'Your account is fine. You can easily bounce back.' };
-        if (drawdown <= 40) return { label: 'MODERATE', color: 'text-amber-500', bg: 'bg-amber-500/10', fee: '$99 Base + 15% Perf.', message: 'Moderate loss. We suggest safe risk-reduction strategies.' };
-        if (drawdown <= 70) return { label: 'SEVERE', color: 'text-orange-500', bg: 'bg-orange-500/10', fee: '$199 Base + 20% Perf.', message: 'Severe loss. We need to be aggressive to safely build it back.' };
-        return { label: 'CRITICAL', color: 'text-red-600', bg: 'bg-red-600/10', fee: '$499 Base + 30% Perf.', message: 'Urgent help needed. High danger of losing everything. Starting Capital Recovery.' };
+        if (drawdown <= 40) return { label: 'MODERATE', color: 'text-amber-500', bg: 'bg-amber-500/10', fee: '$49 Base + 15% Perf.', message: 'Moderate loss. We suggest safe risk-reduction strategies.' };
+        if (drawdown <= 70) return { label: 'SEVERE', color: 'text-orange-500', bg: 'bg-orange-500/10', fee: '$99 Base + 20% Perf.', message: 'Severe loss. We need to be aggressive to safely build it back.' };
+        return { label: 'CRITICAL', color: 'text-red-600', bg: 'bg-red-600/10', fee: '$199 Base + 30% Perf.', message: 'Urgent help needed. High danger of losing everything. Starting Capital Recovery.' };
     };
 
     const currentStatus = getDetails();
