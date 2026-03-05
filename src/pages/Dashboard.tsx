@@ -644,7 +644,7 @@ export default function Dashboard() {
                                                 className={`mt-auto pt-6 border-t border-white/5 flex items-center justify-between transition-colors ${purchase.download_url ? 'group-hover:text-white text-white/50' : 'text-white/20 cursor-not-allowed'}`}
                                             >
                                                 <span className="text-[10px] font-black uppercase tracking-widest">
-                                                    {purchase.download_url ? 'Download Access' : 'Processing Payment...'}
+                                                    {purchase.download_url ? 'Download Access' : 'Pending Delivery'}
                                                 </span>
                                                 <Download className="w-4 h-4" />
                                             </a>
