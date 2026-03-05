@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/useAuth';
-import { Lock, FileUp, Loader2, CheckCircle2, Shield, Calendar, AlertTriangle, Code2, Copy, Mail, Activity, ShieldAlert } from 'lucide-react';
+import { Lock, FileUp, Loader2, CheckCircle2, Shield, Code2, Copy, Mail, Activity, ShieldAlert } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface PurchaseFulfillment {

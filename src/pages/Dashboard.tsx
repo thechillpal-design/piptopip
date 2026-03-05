@@ -113,12 +113,12 @@ export default function Dashboard() {
 
         // Setup real-time listeners
         const recoverySub = supabase.channel('recovery_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'recovery_requests' }, payload => {
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'recovery_requests' }, _payload => {
                 fetchDashboardData();
             }).subscribe();
 
         const copySub = supabase.channel('copytrading_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'copytrading_accounts' }, payload => {
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'copytrading_accounts' }, _payload => {
                 fetchDashboardData();
             }).subscribe();
 

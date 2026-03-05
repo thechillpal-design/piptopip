@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ShieldAlert, Activity, ChevronRight, Zap } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 export default function RecoverySection() {

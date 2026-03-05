@@ -1,4 +1,4 @@
-import { Github, Twitter, Instagram, Send, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
+import { Twitter, Instagram, Send, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 

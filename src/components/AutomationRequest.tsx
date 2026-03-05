@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Bot, Code2, Cpu, ChevronRight, UploadCloud, Loader2 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/useAuth';
 import { supabase } from '../lib/supabase';
