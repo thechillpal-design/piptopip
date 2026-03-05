@@ -179,8 +179,17 @@ export default function Dashboard() {
                 drawdown_percentage: ''
             });
 
+            // Calculate Base Fee based on Drawdown
+            let baseFee = 49; // Default starting at 20-40%
+            if (numDrawdown >= 71) {
+                baseFee = 199;
+            } else if (numDrawdown >= 41) {
+                baseFee = 99;
+            }
+
             // Redirect to Checkout
-            const checkoutUrl = `/checkout?plan=${encodeURIComponent(`Capital Recovery (${recoveryForm.account_number})`)}&price=${encodeURIComponent('$9.99')}&type=Recovery&requestId=${data.id}`;
+            const planName = `Capital Recovery (${numDrawdown}% DD - ${recoveryForm.account_number})`;
+            const checkoutUrl = `/checkout?plan=${encodeURIComponent(planName)}&price=${encodeURIComponent(`$${baseFee}.00`)}&type=Recovery&requestId=${data.id}`;
             navigate(checkoutUrl);
 
         } catch (err: any) {
@@ -583,7 +592,14 @@ export default function Dashboard() {
                                                             </div>
                                                             {rec.status === 'pending_payment' ? (
                                                                 <button
-                                                                    onClick={() => navigate(`/checkout?plan=${encodeURIComponent('Capital Recovery')}&price=$9.99&type=Recovery&requestId=${rec.id}`)}
+                                                                    onClick={() => {
+                                                                        const dd = parseFloat(rec.drawdown_percentage);
+                                                                        let fee = 49;
+                                                                        if (dd >= 71) fee = 199;
+                                                                        else if (dd >= 41) fee = 99;
+                                                                        const bName = `Capital Recovery (${dd}% DD - ${rec.account_number})`;
+                                                                        navigate(`/checkout?plan=${encodeURIComponent(bName)}&price=$${fee}.00&type=Recovery&requestId=${rec.id}`);
+                                                                    }}
                                                                     className="px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border bg-orange-500/10 border-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-white transition-colors cursor-pointer"
                                                                 >
                                                                     Complete Payment
